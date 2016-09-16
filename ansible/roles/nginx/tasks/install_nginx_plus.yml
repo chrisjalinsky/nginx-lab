@@ -1,0 +1,32 @@
+---
+
+- name: Ensure SSL folder present
+  file:
+    dest: "{{ nginx_plus_ssl_dir }}"
+    state: directory
+
+- name: Ensure Nginx Plus SSL certs are in place
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "0640"
+  with_items:
+    - src: "files{{ nginx_plus_ssl_dir }}/{{ nginx_plus_ssl_key_filename }}"
+      dest: "{{ nginx_plus_ssl_dir }}/{{ nginx_plus_ssl_key_filename }}"
+    - src: "files{{ nginx_plus_ssl_dir }}/{{ nginx_plus_ssl_cert_filename }}"
+      dest: "{{ nginx_plus_ssl_dir }}/{{ nginx_plus_ssl_cert_filename }}"
+
+- name: Template apt conf.d nginx file
+  template:
+    src: "etc/apt/apt.conf.d/90nginx"
+    dest: "/etc/apt/apt.conf.d/90nginx"
+
+- name: Add Nginx Plus Apt repo
+  apt_repository:
+    repo: "deb https://plus-pkgs.nginx.com/ubuntu {{ nginx_codename }} nginx-plus"
+
+- name: Ensure nginx Apt package added
+  apt:
+    name: nginx-plus
+    update_cache: yes
+    cache_valid_time: 3600

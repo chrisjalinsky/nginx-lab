@@ -1,0 +1,18 @@
+---
+
+- name: Ensure static html dir present
+  file:
+    dest: "{{ item.dest }}"
+    state: directory
+    owner: "{{ item.owner | default('www-data') }}"
+    mode: "{{ item.mode | default('0755') }}"
+  with_items:
+    - dest: "{{ nginx_static_html_dir }}"
+
+- name: Ensure static html templates present
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode | default('0755') }}"
+    owner: "{{ item.owner | default('www-data') }}"
+  with_items: "{{ nginx_static_html_templates }}"

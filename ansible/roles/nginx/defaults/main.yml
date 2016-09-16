@@ -1,0 +1,56 @@
+---
+
+nginx_plus: "no"
+nginx_branch: ""
+#nginx_branch: "/mainline"
+
+### Load Balancing vars
+
+# streams for ssl pass thru
+nginx_tcpconf_templates: []
+#nginx_tcpconf_templates:
+#  - src: "etc/nginx/tcpconf.d/lb.conf"
+#    dest: "/etc/nginx/tcpconf.d/lb.conf"
+
+nginx_tcpconf_upstream_servers: []
+#nginx_tcpconf_upstream_servers:
+#  - ip: "10.10.0.100:443"
+#  - ip: "10.10.0.101:443"
+
+nginx_tcpconf_listen: "443"
+
+### Std http server vars below
+
+nginx_httpconf_templates: []
+#nginx_httpconf_templates:
+#  - src: "etc/nginx/sites-available/ssl_termination_server.conf"
+#    dest: "etc/nginx/sites-available/ssl_termination_server.conf"
+
+nginx_httpconf_upstream_servers: []
+#nginx_httpconf_upstream_servers:
+#  - ip: "10.10.0.100:80"
+#  - ip: "10.10.0.101:80"
+
+nginx_httpconf_listen: "80"
+
+### SSL
+nginx_create_certs: "no"
+nginx_ssl_dir: "/etc/nginx/ssl"
+nginx_ssl_common_name: "{{ ansible_fqdn }}"
+nginx_ssl_key: "{{ nginx_ssl_dir }}/nginx.key"
+nginx_ssl_csr: "{{ nginx_ssl_dir }}/nginx.csr"
+nginx_ssl_cert: "{{ nginx_ssl_dir }}/nginx.crt"
+nginx_ssl_sans: ""
+
+### NginX Plus vars
+nginx_plus_ssl_dir: "/etc/ssl/nginx"
+nginx_plus_ssl_key_filename: "nginx-repo.key"
+nginx_plus_ssl_cert_filename: "nginx-repo.crt"
+
+### NginX static html templates
+nginx_static_html_dir: "/usr/share/nginx/html"
+
+nginx_static_html_templates: []
+#nginx_static_html_templates:
+#  - src: "var/www/html/index.html"
+#    dest: "/var/www/html/index.html"

@@ -1,0 +1,27 @@
+---
+
+- name: Ensure OpenSSL apt package present
+  apt:
+    name: "openssl"
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Ensure SSL folder present
+  file:
+    dest: "{{ nginx_ssl_dir }}"
+    state: directory
+
+- name: Create key
+  shell: "openssl genrsa -out {{ nginx_ssl_key }} 2048"
+  args:
+    creates: "{{ nginx_ssl_key }}"
+
+- name: Create CSR
+  shell: 'openssl req -new -key {{ nginx_ssl_key }} -out {{ nginx_ssl_csr }} -subj "/C=US/ST=Colorado/L=Denver//O=Acme/OU=IT/CN={{nginx_ssl_common_name}}/emailAddress=test@example.com/subjectAltName={{ nginx_ssl_sans }}"'
+  args:
+    creates: "{{ nginx_ssl_csr }}"
+
+- name: Create cert
+  shell: "openssl x509 -req -days 365 -in {{ nginx_ssl_csr }} -signkey {{ nginx_ssl_key }} -out {{ nginx_ssl_cert }}"
+  args:
+    creates: "{{ nginx_ssl_cert }}"

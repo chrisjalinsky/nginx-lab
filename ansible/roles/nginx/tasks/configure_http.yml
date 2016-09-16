@@ -1,0 +1,23 @@
+---
+
+- name: Ensure sites-available folder present when http templates present
+  file:
+    dest: "/etc/nginx/conf.d"
+    state: directory
+
+- name: Remove default
+  file:
+    dest: "/etc/nginx/conf.d/default.conf"
+    state: absent
+  notify:
+    - configtest
+    - reload nginx
+
+- name: Template http files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items: "{{ nginx_httpconf_templates }}"
+  notify:
+    - configtest
+    - reload nginx

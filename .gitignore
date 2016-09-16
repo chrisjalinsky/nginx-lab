@@ -1,0 +1,5 @@
+.DS_Store
+.vagrant
+ansible/*.retry
+ansible/roles/nginx/files/nginx-repo.key
+ansible/roles/nginx/files/nginx-repo.crt

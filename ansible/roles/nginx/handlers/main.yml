@@ -1,0 +1,9 @@
+---
+
+- name: configtest
+  shell: service nginx configtest
+
+- name: reload nginx
+  service:
+    name: nginx
+    state: reloaded

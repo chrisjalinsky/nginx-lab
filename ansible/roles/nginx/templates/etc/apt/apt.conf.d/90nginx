@@ -1,0 +1,4 @@
+Acquire::https::plus-pkgs.nginx.com::Verify-Peer "true";
+Acquire::https::plus-pkgs.nginx.com::Verify-Host "true";
+Acquire::https::plus-pkgs.nginx.com::SslCert     "{{ nginx_plus_ssl_dir }}/{{ nginx_plus_ssl_cert_filename }}";
+Acquire::https::plus-pkgs.nginx.com::SslKey      "{{ nginx_plus_ssl_dir }}/{{ nginx_plus_ssl_key_filename }}";

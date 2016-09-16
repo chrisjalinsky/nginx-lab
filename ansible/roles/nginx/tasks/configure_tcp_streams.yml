@@ -1,0 +1,15 @@
+---
+
+- name: Ensure tcpconf folder present when templates present
+  file:
+    dest: "/etc/nginx/tcpconf.d"
+    state: directory
+
+- name: Template tcpconf.d files
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  with_items: "{{ nginx_tcpconf_templates }}"
+  notify:
+    - configtest
+    - reload nginx

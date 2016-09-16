@@ -1,0 +1,5 @@
+[app_servers]
+app[1:2].lan
+
+[lb_servers]
+lb1.lan

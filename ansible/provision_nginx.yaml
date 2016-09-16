@@ -1,0 +1,23 @@
+---
+
+- name: Provision Nginx
+  hosts: lb_servers
+  become: yes
+  become_user: root
+  roles:
+    - role: nginx
+      nginx_plus: "yes"
+      nginx_tcpconf_listen: "443"
+      nginx_tcpconf_templates:
+        - src: "etc/nginx/tcpconf.d/lb.conf"
+          dest: "/etc/nginx/tcpconf.d/lb.conf"
+      nginx_tcpconf_upstream_servers:
+        - ip: "10.10.0.100:443"
+        - ip: "10.10.0.101:443"
+      nginx_httpconf_listen: "80"
+      nginx_httpconf_templates:
+        - src: "etc/nginx/conf.d/status.conf"
+          dest: "/etc/nginx/conf.d/status.conf"
+      nginx_httpconf_upstream_servers:
+        - ip: "10.10.0.100:80"
+        - ip: "10.10.0.101:80"

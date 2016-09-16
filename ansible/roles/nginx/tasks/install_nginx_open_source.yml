@@ -1,0 +1,11 @@
+---
+
+- name: Add Nginx Apt repo
+  apt_repository:
+    repo: "deb http://nginx.org/packages{{ nginx_branch }}/ubuntu/ {{ nginx_codename }} nginx"
+
+- name: Ensure nginx Apt package added
+  apt:
+    name: nginx
+    update_cache: yes
+    cache_valid_time: 3600

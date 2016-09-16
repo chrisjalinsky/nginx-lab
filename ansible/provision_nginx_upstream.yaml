@@ -1,0 +1,21 @@
+---
+
+- name: Provision Nginx upstream servers
+  hosts: app_servers
+  become: yes
+  become_user: root
+  roles:
+    - role: nginx
+      nginx_branch: "/mainline"
+      nginx_httpconf_templates:
+        - src: "etc/nginx/conf.d/ssl_termination_server.conf"
+          dest: "/etc/nginx/conf.d/ssl_termination_server.conf"
+        - src: "etc/nginx/conf.d/http_server.conf"
+          dest: "/etc/nginx/conf.d/http_server.conf"
+      nginx_create_certs: "yes"
+      nginx_ssl_common_name: "{{ ansible_fqdn }}"
+      nginx_ssl_sans: "DNS.1=lb1.lan,DNS.2=app1.lan,DNS.3=app2.lan"
+      nginx_static_html_dir: "/var/www/html"
+      nginx_static_html_templates:
+        - src: "var/www/html/index.html"
+          dest: "/var/www/html/index.html"

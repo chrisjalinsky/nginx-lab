@@ -1,0 +1,28 @@
+---
+
+app_servers:
+  hosts: [ app1.lan, app2.lan ]
+  vars:
+    ansible_ssh_user: vagrant
+    ansible_ssh_private_key_file: "~/.vagrant.d/insecure_private_key"
+lb_servers:
+  hosts: [ lb1.lan ]
+  vars:
+    ansible_ssh_user: vagrant
+    ansible_ssh_private_key_file: "~/.vagrant.d/insecure_private_key"
+all:
+  children: [ app_servers, lb_servers ]
+_meta:
+  hostvars:
+    app1.lan:
+      vagrant_cpu: "1"
+      vagrant_mem: "4096"
+      vagrant_ip: "10.10.0.100"
+    app2.lan:
+      vagrant_cpu: "1"
+      vagrant_mem: "4096"
+      vagrant_ip: "10.10.0.101"
+    lb1.lan:
+      vagrant_cpu: "1"
+      vagrant_mem: "2048"
+      vagrant_ip: "10.10.0.102"

@@ -1,0 +1,62 @@
+---
+
+- name: Ensure common Apt packages present
+  apt:
+    name: "{{ item }}"
+    update_cache: yes
+    cache_valid_time: 3600
+  with_items:
+    - apt-transport-https
+    - lsb-release
+    - ca-certificates
+
+- name: Set ansible fact for OS distribution release
+  set_fact:
+    nginx_codename: "{{ ansible_distribution_release }}"
+
+- name: Add Nginx Apt key
+  apt_key:
+    url: "http://nginx.org/keys/nginx_signing.key"
+
+- name: Ensure Apt package nginx-common is absent
+  apt:
+    name: "nginx-common"
+    state: absent
+
+- name: Add nginx open source
+  when: not (nginx_plus | bool)
+  include: install_nginx_open_source.yml
+
+- name: Add nginx plus
+  when: "{{ nginx_plus | bool }}"
+  include: install_nginx_plus.yml
+
+- name: Include SSL when specified
+  when: "{{ nginx_create_certs | bool }}"
+  include: create_ssl_certs.yml
+
+- name: Template nginx conf
+  template:
+    src: "etc/nginx/nginx.conf"
+    dest: "/etc/nginx/nginx.conf"
+  notify:
+    - configtest
+    - reload nginx
+
+- name: Include configuration for TCP streams when tcp streams templates are present
+  when: nginx_tcpconf_templates is defined and nginx_tcpconf_templates|length > 0
+  include: configure_tcp_streams.yml
+
+- name: Include configuration for HTTP when http templates are present
+  when: nginx_httpconf_templates is defined and nginx_httpconf_templates|length > 0
+  include: configure_http.yml
+
+- name: Include static html files when specified
+  when: nginx_static_html_templates is defined and nginx_static_html_dir is defined and nginx_static_html_templates|length > 0
+  include: static_html_templates.yml
+
+- name: Ensure Nginx started
+  service:
+    name: nginx
+    state: started
+  
