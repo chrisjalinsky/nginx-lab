@@ -31,3 +31,8 @@ ansible-playbook provision_nginx_upstreams.yaml -i inventory.py
 ```
 http://10.10.0.102:8888/status.html#tcp_upstreams
 ```
+
+####Test the round robin load balancing
+```
+curl -k https://10.10.0.102:443
+```
