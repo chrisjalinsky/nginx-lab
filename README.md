@@ -20,10 +20,10 @@ Name them ```nginx-repo.key``` and ```nginx-repo.crt``` and place them in the
 
 ###Ansible Playbooks
 
-Run the playbooks from the project's ansible/ directory:
+Run the playbooks from the project's ansible/ directory. Looking at the playbooks, you can see variables passed into the role, that alters the functionality. There are 2 configurations. A load balancer for proxying SSL TCP requests (provision_nginx_lb.yaml). And SSL/HTTP server configurations with or without self signed certificates (provision_nginx_upstream.yaml).
 ```
-ansible-playbook provision_nginx.yaml -i inventory.py
-ansible-playbook provision_nginx_upstreams.yaml -i inventory.py
+ansible-playbook provision_nginx_lb.yaml -i inventory.py
+ansible-playbook provision_nginx_upstream.yaml -i inventory.py
 ```
 ###Nginx
 
